@@ -45,6 +45,8 @@ defmodule NumbersStationCodedMessages do
   """
 
   @doc """
+  Really there is a loop and an inner loop. But confusing thing is they can both be served by
+  the same function.
 
   ### Examples
 
@@ -66,46 +68,37 @@ defmodule NumbersStationCodedMessages do
       iex> NumbersStationCodedMessages.solution([1, 2, 3, 4], 2)
       [1, 1]
   """
-  def solution(list, target_sum), do: traverse_list(list, target_sum, [0, -1], 0, 0)
+  def solution(list, target_sum) do
+    Enum.with_index(list)
+    |> Enum.reduce_while([-1, -1], fn {number, current_start_index}, indexes ->
+      # drop all elements up to the current element. Prepend with a 0 value
+      rest = [0 | Enum.drop(list, current_start_index + 1)]
 
-  # If we get to the end of the list, then we know we haven't found anything yet
-  defp traverse_list([], _target_sum, [f, -1], _current_index, _sum), do: [-1, -1]
+      Enum.with_index(rest)
+      |> Enum.reduce_while({number, [current_start_index, -1]}, fn {next_number,
+                                                                    current_end_index},
+                                                                   {running_total, acc} ->
+        case running_total + next_number do
+          total when total === target_sum ->
+            {:halt, {total, [current_start_index, current_start_index + current_end_index]}}
 
-  defp traverse_list([h | rest], target_sum, [starting_index, end_index], current_index, sum) do
-    case h + sum do
-      total when total == target_sum ->
-        [starting_index, current_index]
+          total when total > target_sum ->
+            {:halt, {total, acc}}
 
-      total when total > target_sum ->
-        traverse_list(rest, target_sum, [current_index + 1, end_index], current_index + 1, 0)
-
-      total when total < target_sum ->
-        traverse_list(rest, target_sum, [starting_index, end_index], current_index + 1, total)
-        |> case do
-          # We didn't find it so drop and skip to the next bit
-          [-1, -1] ->
-            traverse_list(rest, target_sum, [current_index + 1, end_index], current_index + 1, 0)
-
-          # We found a match so return it?
-          other ->
-            other
+          total when total < target_sum ->
+            {:cont, {total, acc}}
         end
-    end
+      end)
+      |> case do
+        {_, [_, -1]} -> {:cont, indexes}
+        # How do we break out here. Reduce While
+        {^target_sum, result} -> {:halt, result}
+      end
+    end)
   end
 end
 
-# [-1, -1]
-# [0, 1]
-# [0, 2]
-# [2, 4]
-# [-1, -1]
-# [0, 0]
-# [2, 2]
-# [0, 1]
-# [1, 1]
-# [2, 4]
-# [-1, -1]
-# [3, 4]
+NumbersStationCodedMessages.solution([1, 2], 2) |> IO.inspect(limit: :infinity, label: "")
 NumbersStationCodedMessages.solution([], 7) |> IO.inspect(limit: :infinity, label: "")
 
 NumbersStationCodedMessages.solution([4, 3, 5, 7, 8], 7)
@@ -129,7 +122,7 @@ NumbersStationCodedMessages.solution([1, 18, 12], 18) |> IO.inspect(limit: :infi
 NumbersStationCodedMessages.solution(Enum.to_list(1..100), 12)
 |> IO.inspect(limit: :infinity, label: "")
 
-NumbersStationCodedMessages.solution(Enum.to_list(100..1), 12)
+NumbersStationCodedMessages.solution(Enum.to_list(99..1), 12)
 |> IO.inspect(limit: :infinity, label: "")
 
 NumbersStationCodedMessages.solution([10, 9, 8, 7, 6, 5, 4, 3, 2, 1], 13)

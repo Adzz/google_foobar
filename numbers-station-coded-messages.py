@@ -87,7 +87,7 @@ print(solution([18, 18, 12], 12))
 print(solution([10,2, 10, 2], 12))
 print(solution([1, 18, 12], 18))
 print(solution(list(range(1, 100)), 12))
-print(solution(list(range(100, 1)), 12))
+print(solution(list(reversed(list(range(1, 100)))), 12))
 print(solution([10,9,8,7,6,5,4,3,2,1], 13))
 
 
