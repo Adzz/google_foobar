@@ -66,9 +66,7 @@ defmodule NumbersStationCodedMessages do
       iex> NumbersStationCodedMessages.solution([1, 2, 3, 4], 2)
       [1, 1]
   """
-  def solution(list, target_sum) do
-    traverse_list(list, target_sum, [0, -1], 0, 0)
-  end
+  def solution(list, target_sum), do: traverse_list(list, target_sum, [0, -1], 0, 0)
 
   # If we get to the end of the list, then we know we haven't found anything yet
   defp traverse_list([], _target_sum, [f, -1], _current_index, _sum), do: [-1, -1]
@@ -95,3 +93,44 @@ defmodule NumbersStationCodedMessages do
     end
   end
 end
+
+# [-1, -1]
+# [0, 1]
+# [0, 2]
+# [2, 4]
+# [-1, -1]
+# [0, 0]
+# [2, 2]
+# [0, 1]
+# [1, 1]
+# [2, 4]
+# [-1, -1]
+# [3, 4]
+NumbersStationCodedMessages.solution([], 7) |> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([4, 3, 5, 7, 8], 7)
+|> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([4, 3, 5, 7, 8], 12)
+|> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([1, 2, 4, 3, 5, 7, 8], 12)
+|> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([1, 2, 4], 30) |> IO.inspect(limit: :infinity, label: "")
+NumbersStationCodedMessages.solution([1, 2, 4], 1) |> IO.inspect(limit: :infinity, label: "")
+NumbersStationCodedMessages.solution([18, 18, 12], 12) |> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([10, 2, 10, 2], 12)
+|> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([1, 18, 12], 18) |> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution(Enum.to_list(1..100), 12)
+|> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution(Enum.to_list(100..1), 12)
+|> IO.inspect(limit: :infinity, label: "")
+
+NumbersStationCodedMessages.solution([10, 9, 8, 7, 6, 5, 4, 3, 2, 1], 13)
+|> IO.inspect(limit: :infinity, label: "")

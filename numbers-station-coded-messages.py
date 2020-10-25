@@ -44,25 +44,51 @@ that sublist.
 So we want the first, smallest list sub list of integers that sum to reach the target t.
 """
 
-def solution(l, t):
-  """
-  I think we need to like window across it. We need to be like first element, plus next
-  then next until we > it. then try drop the first element and do the same again.
-  so on until we get to the end of the list or find a sublist.
+def solution(l, target_sum):
+    """
+    I think we need to like window across it. We need to be like first element, plus next
+    then next until we > it. then try drop the first element and do the same again.
+    so on until we get to the end of the list or find a sublist.
 
-  That means... worst case is when there is no sublist, and the sum of all elements is less than
-  the desired number.
+    That means... worst case is when there is no sublist, and the sum of all elements is less than
+    the desired number.
 
-  So it's O(log n) ? For every element you have to check that element against the rest of the list
-  but the rest of the list decreases each iteration.
+    So it's O(log n ^n) or O(n^log n) ? For every element you have to check that element against the rest of the list
+    there's a loop in a loop
+    but the rest of the list decreases each iteration.
 
-  We need to keep some state: the running total of the sum, the starting index.
-  """
+    We need to keep some state: the running total of the sum, the starting index.
+    """
 
+    result = [-1, -1]
+    if not l:
+        return result
+    for current_start_index, number in enumerate(l):
+        running_total = number
+        inner_result = [current_start_index, -1]
+        for current_end_index, next_number in enumerate([0] + l[current_start_index + 1:]):
+            if running_total + next_number == target_sum:
+                return [current_start_index, current_start_index + current_end_index]
+            elif next_number + running_total > target_sum:
+                break
+            else:
+                running_total += next_number
+        if inner_result[1] > -1:
+            result = inner_result
+    return result
 
-
-
-
+print(solution([], 7))
+print(solution([4, 3, 5, 7, 8], 7))
+print(solution([4, 3, 5, 7, 8], 12))
+print(solution([1, 2, 4, 3, 5, 7, 8], 12))
+print(solution([1, 2, 4], 30))
+print(solution([1, 2, 4], 1))
+print(solution([18, 18, 12], 12))
+print(solution([10,2, 10, 2], 12))
+print(solution([1, 18, 12], 18))
+print(solution(list(range(1, 100)), 12))
+print(solution(list(range(100, 1)), 12))
+print(solution([10,9,8,7,6,5,4,3,2,1], 13))
 
 
 
