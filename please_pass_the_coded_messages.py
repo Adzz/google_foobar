@@ -29,6 +29,7 @@
 def solution(l):
   """
   A NUMBER IS DIVISIBLE BY 3 IF ALL THE DIGITS ADD UP TO A NUMBER THAT IS DIVISIBLE BY 3.
+  So the basic insight is to
   """
   return do_solution(sorted(l))
 
@@ -39,10 +40,9 @@ def do_solution(sorted):
     if sum_divisible_by_three(sorted):
       return create_largest_number(sorted)
     else:
-      head, *rest = sorted
       number_found = check_dropping_smallest_digit(sorted, [])
       if number_found == "not found":
-        return do_solution(rest)
+        return do_solution(sorted[1:])
       else:
         return number_found
 
@@ -50,20 +50,41 @@ def sum_divisible_by_three(l):
   return sum(l) % 3 == 0
 
 def create_largest_number(l):
-   return int("".join(map(str, reversed(l))))
+  if len(l) == 0:
+    return 0
+  else:
+    return int("".join(map(str, reversed(l))))
 
 def check_dropping_smallest_digit(l, visited):
   if len(l) == 0:
     return "not found"
   else:
-    head, *rest = l
+    rest = l[1:]
     list_to_check = visited + rest
     if sum_divisible_by_three(list_to_check):
       return create_largest_number(list_to_check)
     else:
-      return check_dropping_smallest_digit(rest, visited + [head])
+      new = l[:]
+      return check_dropping_smallest_digit(rest, visited + [new.pop(0)])
 
 
 print(solution([3, 1, 4, 1]))
 print(solution([3, 1, 4, 1, 5, 9]))
 print(solution([1, 2]))
+print(solution([2, 1, 8]))
+print(solution([1,1,1,1,1,4,1,2]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

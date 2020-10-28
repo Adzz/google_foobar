@@ -76,6 +76,8 @@ defmodule PleasePassTheCodedMessages do
     |> Kernel.==(0)
   end
 
+  def create_largest_number([]), do: 0
+
   def create_largest_number(list_of_numbers) do
     list_of_numbers
     |> Enum.reverse()
@@ -113,4 +115,7 @@ PleasePassTheCodedMessages.solution([1, 2])
 |> IO.inspect(limit: :infinity, label: "")
 
 PleasePassTheCodedMessages.solution([2, 1, 8])
+|> IO.inspect(limit: :infinity, label: "")
+
+PleasePassTheCodedMessages.solution([1])
 |> IO.inspect(limit: :infinity, label: "")
